@@ -4,6 +4,8 @@ Makes it possible to draw n-corner-star (including triangle, square) with `L.Cir
 
 It modified `L.CircleMarker` & `L.Circle` with an option [star: number].
 
+The reason WHY I modify it instead of extend it, is because my project need to edit these elements by L.Editable, and that troubles me. if you want extend it, just type base on my code.
+
 ![star-circle](./star-circle.png)
 
 

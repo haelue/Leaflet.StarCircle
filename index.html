@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Leaflet.StarCircle</title>
 
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <link href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" rel="stylesheet"/>
   <script src="src/leaflet-starcircle.js"></script>
 
   <style>
@@ -32,52 +32,53 @@
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
+          // renderer: L.canvas(), // support both SVG & Canvas
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
       var mapCenter = map.getCenter();
 
-      var star1 = L.circleMarker(mapCenter,{
+      var star1 = L.starCircleMarker(mapCenter,{
           radius: 30,
           star: 3,
       }).addTo(map);
 
-      var star2 = L.circle(L.latLng(mapCenter.lat - 0.04, mapCenter.lng - 0.04), {
+      var star2 = L.starCircle(L.latLng(mapCenter.lat - 0.04, mapCenter.lng - 0.04), {
           radius: 300,
           star: 4,
       }).addTo(map);
 
-      var star3 = L.circleMarker(L.latLng(mapCenter.lat - 0.04, mapCenter.lng), {
+      var star3 = L.starCircleMarker(L.latLng(mapCenter.lat - 0.04, mapCenter.lng), {
           radius: 40,
           star: 5,
       }).addTo(map);
 
-      var star4 = L.circle(L.latLng(mapCenter.lat - 0.04, mapCenter.lng + 0.04), {
+      var star4 = L.starCircle(L.latLng(mapCenter.lat - 0.04, mapCenter.lng + 0.04), {
           radius: 400,
           star: 6,
       }).addTo(map);
 
-      var star5 = L.circleMarker(L.latLng(mapCenter.lat, mapCenter.lng + 0.04), {
+      var star5 = L.starCircleMarker(L.latLng(mapCenter.lat, mapCenter.lng + 0.04), {
           radius: 50,
           star: 7,
       }).addTo(map);
 
-      var star6 = L.circle(L.latLng(mapCenter.lat + 0.04, mapCenter.lng + 0.04), {
+      var star6 = L.starCircle(L.latLng(mapCenter.lat + 0.04, mapCenter.lng + 0.04), {
           radius: 500,
           star: 8,
       }).addTo(map);
 
-      var star7 = L.circleMarker(L.latLng(mapCenter.lat + 0.04, mapCenter.lng), {
+      var star7 = L.starCircleMarker(L.latLng(mapCenter.lat + 0.04, mapCenter.lng), {
           radius: 60,
           star: 9,
       }).addTo(map);
 
-    var star8 = L.circle(L.latLng(mapCenter.lat + 0.04, mapCenter.lng - 0.04), {
+    var star8 = L.starCircle(L.latLng(mapCenter.lat + 0.04, mapCenter.lng - 0.04), {
         radius: 600,
         star: 10,
     }).addTo(map);
 
-    var star9 = L.circleMarker(L.latLng(mapCenter.lat, mapCenter.lng - 0.04), {
+    var star9 = L.starCircleMarker(L.latLng(mapCenter.lat, mapCenter.lng - 0.04), {
         radius: 60,
         star: 11,
     }).addTo(map);

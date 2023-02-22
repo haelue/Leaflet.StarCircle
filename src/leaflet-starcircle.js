@@ -2,17 +2,15 @@
  * @example
  *
  * ```js
- * L.Circle([50.5, 30.5], {radius: 200, star: 5}).addTo(map);
- * L.CircleMarker([50.5, 30.5], {radius: 200, star: 5}).addTo(map);
+ * L.Star([50.5, 30.5], {radius: 200, star: 5}).addTo(map);
+ * L.StarMarker([50.5, 30.5], {radius: 200, star: 5}).addTo(map);
  * ```
  */
 
-L.CircleMarker.include({
-  initialize: function (latlng, options) {
-    L.Util.setOptions(this, options);
-    this._latlng = L.latLng(latlng);
-    this._radius = this.options.radius;
-    this._star = this.options.star;
+L.StarCircleMarker = L.CircleMarker.extend({
+  initialize: function (latlng, options, legacyOptions) {
+    L.CircleMarker.prototype.initialize.call(this, latlng, options, legacyOptions);
+    this._star = this.options.star || 1;
   },
 
   // @method setStar(star: Number): this
@@ -29,33 +27,22 @@ L.CircleMarker.include({
   },
 
   setStyle: function (options) {
-    var radius = (options && options.radius) || this._radius;
-    var star = (options && options.star) || this._star;
-    L.Path.prototype.setStyle.call(this, options);
-    this.setRadius(radius);
-    this.setStar(star);
+    L.CircleMarker.setStyle.initialize.call(this, options);
+    this.setStar(options.star || 1);
     return this;
+  },
+
+  _updatePath: function () {
+    this._renderer._updateStarCircle(this);
   },
 });
 
-L.Circle.include({
+L.starCircleMarker = function(...args) { return new L.StarCircleMarker(...args); }
+
+L.StarCircle = L.Circle.extend({
   initialize: function (latlng, options, legacyOptions) {
-    if (typeof options === "number") {
-      // Backwards compatibility with 0.7.x factory (latlng, radius, options?)
-      options = L.Util.extend({}, legacyOptions, { radius: options });
-    }
-    L.Util.setOptions(this, options);
-    this._latlng = L.latLng(latlng);
-
-    if (isNaN(this.options.radius)) {
-      throw new Error("Circle radius cannot be NaN");
-    }
-
-    // @section
-    // @aka Circle options
-    // @option radius: Number; Radius of the circle, in meters.
-    this._mRadius = this.options.radius;
-    this._star = this.options.star;
+    L.Circle.prototype.initialize.call(this, latlng, options, legacyOptions);
+    this._star = this.options.star || 1;
   },
 
   // @method setStar(star: Number): this
@@ -71,8 +58,18 @@ L.Circle.include({
     return this._star;
   },
 
-  setStyle: L.CircleMarker.prototype.setStyle,
+  setStyle: function (options) {
+    L.Circle.setStyle.initialize.call(this, options);
+    this.setStar(options.star || 1);
+    return this;
+  },
+
+  _updatePath: function () {
+    this._renderer._updateStarCircle(this);
+  },
 });
+
+L.starCircle = function(...args) { return new L.StarCircle(...args); }
 
 function polarPoint(x, y, rad, r) {
   return { x: x + Math.cos(rad) * r, y: y + Math.sin(rad) * r };
@@ -99,32 +96,8 @@ function createStar(n, x, y, radius, radOffset = 0) {
   return verts;
 }
 
-L.SVG.include({
-  _updateDonut: function (layer) {
-    var p = layer._point,
-      r = Math.max(Math.round(layer._radius), 1),
-      r2 = Math.max(Math.round(layer._radiusY), 1) || r,
-      arc = "a" + r + "," + r2 + " 0 1,0 ";
-
-    var innerP = layer._innerPoint,
-      innerR = Math.max(Math.round(layer._innerRadius), 1),
-      innerR2 = Math.max(Math.round(layer._innerRadiusY), 1) || innerR,
-      innerArc = "a" + innerR + "," + innerR2 + " 0 1,0 ";
-
-    // drawing a circle with hole with two half-arcs
-    var d;
-    if (layer._empty()) {
-      d = "M0 0";
-    } else {
-      d = "M" + (p.x - r) + "," + p.y + arc + r * 2 + ",0 " + arc + -r * 2 + ",0 ";
-      d += "M" + (innerP.x - innerR) + "," + innerP.y + innerArc + innerR * 2 + ",0 " + innerArc + -innerR * 2 + ",0 ";
-    }
-    this._setPath(layer, d);
-  },
-});
-
 L.Canvas.include({
-  _updateCircle: function (layer) {
+  _updateStarCircle: function (layer) {
     if (!this._drawing || layer._empty()) {
       return;
     }
@@ -162,7 +135,7 @@ L.Canvas.include({
 });
 
 L.SVG.include({
-  _updateCircle: function (layer) {
+  _updateStarCircle: function (layer) {
     var p = layer._point,
       r = Math.max(Math.round(layer._radius), 1);
     if (layer._star > 2) {

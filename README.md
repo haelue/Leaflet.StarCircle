@@ -1,28 +1,25 @@
-# L.StarCircle
+# Leaflet.StarCircle
 
-Makes it possible to draw n-corner-star (including triangle, square) with `L.CircleMarker` & `L.Circle` on Leaflet maps. 
+Makes it possible to draw triangle, square, star(n-corner) with `L.StarCircleMarker` & `L.StarCircle` on Leaflet maps.
 
-It modified `L.CircleMarker` & `L.Circle` with an option [star: number].
-
-The reason WHY I modify it instead of extend it, is because my project need to edit these elements by L.Editable, and that troubles me. if you want extend it, just type base on my code.
+Look into the [Demo](https://haelue.github.io/Leaflet.StarCircle/). 
 
 ![star-circle](./star-circle.png)
 
-
 ```js
 var mapCenter = map.getCenter();
-var star1 = L.circleMarker(mapCenter,{
+var star1 = L.starCircleMarker(mapCenter,{
     radius: 50,
     star: 3,
 }).addTo(map);
 
-var star2 = L.circle(L.latLng(mapCenter.lat, mapCenter.lng - 0.05), {
+var star2 = L.starCircle(L.latLng(mapCenter.lat, mapCenter.lng - 0.05), {
     radius: 500,
     star: 4,
 }).addTo(map);
 
-var star3 = L.circleMarker(L.latLng(mapCenter.lat, mapCenter.lng + 0.05), {
-    radius: 60,
+var star3 = L.starCircleMarker(L.latLng(mapCenter.lat, mapCenter.lng + 0.05), {
+    radius: 50,
     star: 5,
 }).addTo(map);
 ```
@@ -45,4 +42,4 @@ import "./leaflet-starcircle.js"
 
 | Option                              | Description                                                                               |
 | :---------------------------------- | :---------------------------------------------------------------------------------------- |
-| star                                | number of star corners. (<3: normal circle, 3: triangle, 4: square, >4:n-corner-star)     |
+| star                                | number of star corners. (<3: normal circle, 3: triangle, 4: square, >4: n-corner-star)     |
